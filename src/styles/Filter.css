@@ -1,0 +1,27 @@
+.header {
+  align-self: center;
+}
+
+.searchField {
+  align-self: center;
+  margin: 15px 0;
+  padding: 15px 10px;
+  width: 200px;
+  outline: none;
+  border: 2px solid rgb(0, 0, 0);
+  border-radius: 5px;
+  display: inline-block;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transition: 0.2s ease all;
+  -moz-transition: 0.2s ease all;
+  -ms-transition: 0.2s ease all;
+  -o-transition: 0.2s ease all;
+  transition: 0.2s ease all;
+}
+
+div {
+  display: flex;
+  flex-direction: column;
+}
