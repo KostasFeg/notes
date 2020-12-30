@@ -13,14 +13,28 @@ const noteReducer = (state = initialState, action) => {
 
       const updatedNote = { ...noteVoted, content: action.data.content };
       return state.map((a) => (a.id === id ? updatedNote : a));
+    case 'DELETE':
+      return state.filter((note) => note.id !== action.data);
+    case 'TOGGLE_IMPORTANCE':
+      const idImportance = action.data;
+      console.log(idImportance);
+      const noteToChange = state.find((n) => n.id === idImportance);
+      const changedNote = {
+        ...noteToChange,
+        important: !noteToChange.important,
+      };
+      return state.map((note) =>
+        note.id !== idImportance ? note : changedNote
+      );
+
     default:
       return state;
   }
 };
 
-export const createNote = (note) => {
+export const createNote = (note, title) => {
   return async (dispatch) => {
-    const newNote = await noteService.create(note);
+    const newNote = await noteService.create(note, title);
     dispatch({
       type: 'CREATE',
       data: newNote,
@@ -48,6 +62,24 @@ export const updateNote = (note, newContent) => {
       type: 'UPDATE',
       data: updatedNote,
     });
+  };
+};
+
+export const delNote = (note) => {
+  return async (dispatch) => {
+    const noteToBeDeleted = await noteService.deletion(note);
+    dispatch({
+      type: 'DELETE',
+      data: note.id,
+    });
+  };
+};
+
+export const toggleImportanceOf = (note) => {
+  return async (dispatch) => {
+    const notToChangeImportance = await noteService.changeImportance(note);
+
+    dispatch({ type: 'TOGGLE_IMPORTANCE', data: note.id });
   };
 };
 

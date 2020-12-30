@@ -1,9 +1,15 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateNote } from '../reducers/noteReducer';
+import {
+  updateNote,
+  delNote,
+  toggleImportanceOf,
+} from '../reducers/noteReducer';
+import { createNotification } from '../reducers/notificationReducer';
 import '../styles/Notes.css';
 import { useState } from 'react';
-import Modal from './Modal.js';
+import Modal from 'react-modal';
+import ReactMarkdown from 'react-markdown';
 
 const Notes = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,18 +34,32 @@ const Notes = () => {
     const newContent = event.target.note.value;
     event.target.note.value = '';
     dispatch(updateNote(note, newContent));
+    dispatch(createNotification(`${note.title} was updated`, 10000));
   };
 
   console.log(notes);
 
   const toBeUpdated = () => (
-    <form onSubmit={updateNoted}>
-      <div>
-        <input name="note" />
-      </div>
-      <button type="submit">create</button>
-    </form>
+    <Modal isOpen={isOpen} onRequestClose={() => setIsOpen(false)}>
+      <form onSubmit={updateNoted}>
+        <div>
+          <h4>{note.title}</h4>
+          <textarea name="note" defaultValue={note.content} />
+        </div>
+        <button type="submit">update</button>
+      </form>
+    </Modal>
   );
+
+  const toBeDeleted = (note) => {
+    dispatch(delNote(note));
+    console.log(note.id);
+  };
+
+  const changeImportance = (note) => {
+    dispatch(toggleImportanceOf(note));
+    console.log(note);
+  };
 
   return (
     <div>
@@ -47,10 +67,20 @@ const Notes = () => {
       <ul>
         {notes.map((note) => (
           <li className="note" key={note.id}>
-            {note.content}
-            <button onClick={() => [setIsOpen(!isOpen), setNote(note)]}>
-              Edit
-            </button>
+            <div className="content">
+              <h3>{note.title}</h3>
+              <h5>{note.important ? 'important' : 'not important'}</h5>
+              <ReactMarkdown>{note.content}</ReactMarkdown>
+              <div>
+                <button onClick={() => toBeDeleted(note)}>delete</button>
+                <button onClick={() => [setIsOpen(!isOpen), setNote(note)]}>
+                  update
+                </button>
+                <button onClick={() => changeImportance(note)}>
+                  importance
+                </button>
+              </div>
+            </div>
           </li>
         ))}
       </ul>

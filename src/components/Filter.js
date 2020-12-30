@@ -9,12 +9,9 @@ const Filter = () => {
     // input-field value is in variable event.target.value
     dispatch(filterChange(event.target.value));
   };
-  const style = {
-    marginBottom: 10,
-  };
 
   return (
-    <div style={style}>
+    <div className="headerAndSearch">
       <h3 className="header">NOTES</h3>
       <input className="searchField" onChange={handleChange} />
     </div>
