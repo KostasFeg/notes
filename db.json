@@ -9,14 +9,8 @@
     {
       "content": "- test  \n- another test\n- another one\n- geia s kamari m\n\n\n# test\n\n\n- [x] check\n\n[a link](https://www.aek365.org/)\n\n",
       "title": "dsadas",
-      "important": false,
+      "important": true,
       "id": "bmYYD4a"
-    },
-    {
-      "content": "dsad",
-      "title": "dasds",
-      "important": false,
-      "id": "8tyIvBk"
     },
     {
       "content": "dasdad",
@@ -29,12 +23,6 @@
       "title": "sadsad",
       "important": false,
       "id": "YtS0Ne9"
-    },
-    {
-      "content": "fsafas",
-      "title": "fsafsa",
-      "important": false,
-      "id": "bV7OGN8"
     },
     {
       "content": "asddad",

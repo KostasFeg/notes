@@ -1,6 +1,7 @@
 * {
   box-sizing: border-box;
 }
+
 .listOfNotes {
   display: flex;
   flex-wrap: wrap;
@@ -54,9 +55,14 @@
   margin-top: -20px;
 }
 
-.note h3 {
+.title {
   align-self: center;
   box-shadow: inset 0 1px 0 0 #e5e5e5;
+}
+
+.titleImportant {
+  align-self: center;
+  box-shadow: inset 0 1px 0 0 #ce2e2e;
 }
 
 .notesIcons {
@@ -66,4 +72,19 @@
 
 .notesIcons i {
   margin-left: 10px;
+}
+
+.textArea {
+  width: 600px;
+}
+
+.updateModalTitle {
+  display: flex;
+  align-self: center;
+  justify-content: center;
+}
+
+.updateSubmitButton {
+  border: none;
+  margin-top: 15px;
 }

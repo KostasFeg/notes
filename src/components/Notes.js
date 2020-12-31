@@ -11,6 +11,7 @@ import { useState } from 'react';
 import Modal from 'react-modal';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
+import TextareaAutosize from 'react-textarea-autosize';
 
 const Notes = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -44,16 +45,26 @@ const Notes = () => {
     <Modal isOpen={isOpen} onRequestClose={() => setIsOpen(false)}>
       <form onSubmit={updateNoted}>
         <div>
-          <h4>{note.title}</h4>
-          <textarea name="note" defaultValue={note.content} />
+          <h4 className={noteStyles.updateModalTitle}>{note.title}</h4>
+          <TextareaAutosize
+            className={noteStyles.textArea}
+            name="note"
+            defaultValue={note.content}
+            autoFocus
+          />
         </div>
-        <button type="submit">update</button>
+        <button className={noteStyles.updateSubmitButton} type="submit">
+          update
+        </button>
       </form>
     </Modal>
   );
 
   const toBeDeleted = (note) => {
-    dispatch(delNote(note));
+    const r = window.confirm(`You want to delete ${note.title}?`);
+    if (r) {
+      dispatch(delNote(note));
+    }
     console.log(note.id);
   };
 
@@ -69,7 +80,13 @@ const Notes = () => {
         {notes.map((note) => (
           <li className={noteStyles.note} key={note.id}>
             <div className={noteStyles.content}>
-              <h3>{note.title}</h3>
+              <h3
+                className={
+                  note.important ? noteStyles.titleImportant : noteStyles.title
+                }
+              >
+                {note.title}
+              </h3>
               <h5>{note.important ? 'important' : 'not important'}</h5>
               <ReactMarkdown
                 className={noteStyles.markdown}
