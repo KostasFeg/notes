@@ -6,10 +6,11 @@ import {
   toggleImportanceOf,
 } from '../reducers/noteReducer';
 import { createNotification } from '../reducers/notificationReducer';
-import '../styles/Notes.css';
+import noteStyles from '../styles/noteStyles.module.css';
 import { useState } from 'react';
 import Modal from 'react-modal';
 import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm';
 
 const Notes = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,7 +35,7 @@ const Notes = () => {
     const newContent = event.target.note.value;
     event.target.note.value = '';
     dispatch(updateNote(note, newContent));
-    dispatch(createNotification(`${note.title} was updated`, 10000));
+    dispatch(createNotification(`${note.title} was updated`, 3000));
   };
 
   console.log(notes);
@@ -64,21 +65,30 @@ const Notes = () => {
   return (
     <div>
       {isOpen ? toBeUpdated() : ''}
-      <ul>
+      <ul className={noteStyles.listOfNotes}>
         {notes.map((note) => (
-          <li className="note" key={note.id}>
-            <div className="content">
+          <li className={noteStyles.note} key={note.id}>
+            <div className={noteStyles.content}>
               <h3>{note.title}</h3>
               <h5>{note.important ? 'important' : 'not important'}</h5>
-              <ReactMarkdown>{note.content}</ReactMarkdown>
-              <div>
-                <button onClick={() => toBeDeleted(note)}>delete</button>
-                <button onClick={() => [setIsOpen(!isOpen), setNote(note)]}>
-                  update
-                </button>
-                <button onClick={() => changeImportance(note)}>
-                  importance
-                </button>
+              <ReactMarkdown
+                className={noteStyles.markdown}
+                source={note.content}
+                plugins={[gfm]}
+              ></ReactMarkdown>
+              <div className={noteStyles.notesIcons}>
+                <i
+                  className="fas fa-trash-alt"
+                  onClick={() => toBeDeleted(note)}
+                ></i>
+                <i
+                  className="fas fa-pen"
+                  onClick={() => [setIsOpen(!isOpen), setNote(note)]}
+                ></i>
+                <i
+                  className="fas fa-star"
+                  onClick={() => changeImportance(note)}
+                ></i>
               </div>
             </div>
           </li>

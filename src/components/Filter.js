@@ -1,7 +1,7 @@
 import React from 'react';
 import { filterChange } from '../reducers/filterReducer';
 import { useDispatch } from 'react-redux';
-import '../styles/Filter.css';
+import filterStyles from '../styles/filterStyles.module.css';
 
 const Filter = () => {
   const dispatch = useDispatch();
@@ -11,9 +11,9 @@ const Filter = () => {
   };
 
   return (
-    <div className="headerAndSearch">
-      <h3 className="header">NOTES</h3>
-      <input className="searchField" onChange={handleChange} />
+    <div className={filterStyles.headerAndSearch}>
+      <h3 className={filterStyles.header}>NOTES</h3>
+      <input className={filterStyles.searchField} onChange={handleChange} />
     </div>
   );
 };

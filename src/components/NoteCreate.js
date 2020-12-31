@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../styles/NoteCreate.css';
+import noteCreateStyles from '../styles/noteCreateStyles.module.css';
 import { useDispatch } from 'react-redux';
 import { createNote } from '../reducers/noteReducer';
 import { createNotification } from '../reducers/notificationReducer';
@@ -15,28 +15,34 @@ const NoteCreate = () => {
     const title = event.target.title.value;
     event.target.title.value = '';
     dispatch(createNote(content, title));
-    dispatch(createNotification(content, 10000));
+    dispatch(createNotification(`${content} was created`, 2000));
+    setTimeout(() => {
+      setIsOpen(false);
+    }, 300);
   };
   return (
-    <div className="createButtonDiv">
-      <button className="createButton" onClick={() => setIsOpen(true)}>
+    <div className={noteCreateStyles.createButtonDiv}>
+      <button
+        className={noteCreateStyles.createButton}
+        onClick={() => setIsOpen(true)}
+      >
         Create
       </button>
       <Modal isOpen={isOpen} onRequestClose={() => setIsOpen(false)}>
         <form onSubmit={addNote}>
           <input
-            className="createInput"
+            className={noteCreateStyles.createInput}
             name="title"
             placeholder="Title"
             required="true"
           />
           <input
-            className="createInput"
+            className={noteCreateStyles.createInput}
             name="note"
             placeholder="Content"
             required="true"
           />
-          <button className="createSubmitBtn" type="submit">
+          <button className={noteCreateStyles.createSubmitBtn} type="submit">
             create
           </button>
         </form>
