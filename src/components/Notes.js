@@ -16,6 +16,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 const Notes = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [note, setNote] = useState('');
+  const [liveNote, setLiveNote] = useState('');
   const dispatch = useDispatch();
   const notes = useSelector((state) =>
     state.filter === ''
@@ -42,7 +43,10 @@ const Notes = () => {
   console.log(notes);
 
   const toBeUpdated = () => (
-    <Modal isOpen={isOpen} onRequestClose={() => setIsOpen(false)}>
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={() => [setIsOpen(false), setLiveNote('')]}
+    >
       <form onSubmit={updateNoted}>
         <div>
           <h4 className={noteStyles.updateModalTitle}>{note.title}</h4>
@@ -51,11 +55,16 @@ const Notes = () => {
             name="note"
             defaultValue={note.content}
             autoFocus
+            onChange={(e) => setLiveNote(e.target.value)}
           />
         </div>
         <button className={noteStyles.updateSubmitButton} type="submit">
           update
         </button>
+        <ReactMarkdown
+          className={noteStyles.liveText}
+          source={liveNote}
+        ></ReactMarkdown>
       </form>
     </Modal>
   );
