@@ -17,6 +17,7 @@ const Notes = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [note, setNote] = useState('');
   const [liveNote, setLiveNote] = useState('');
+  const [list, setList] = useState(true);
   const dispatch = useDispatch();
   const notes = useSelector((state) =>
     state.filter === ''
@@ -35,7 +36,7 @@ const Notes = () => {
     event.preventDefault();
     notes.map((notes) => (notes.id === note ? note : notes));
     const newContent = event.target.note.value;
-    event.target.note.value = '';
+
     dispatch(updateNote(note, newContent));
     dispatch(createNotification(`${note.title} was updated`, 3000));
   };
@@ -51,7 +52,7 @@ const Notes = () => {
         <div>
           <h4 className={noteStyles.updateModalTitle}>{note.title}</h4>
           <TextareaAutosize
-            className={noteStyles.textArea}
+            className={noteStyles.createInput}
             name="note"
             defaultValue={note.content}
             autoFocus
@@ -61,11 +62,13 @@ const Notes = () => {
         <button className={noteStyles.updateSubmitButton} type="submit">
           update
         </button>
+      </form>
+      <div className={noteStyles.borderAroundLive}>
         <ReactMarkdown
           className={noteStyles.liveText}
           source={liveNote}
         ></ReactMarkdown>
-      </form>
+      </div>
     </Modal>
   );
 
@@ -84,10 +87,19 @@ const Notes = () => {
 
   return (
     <div>
+      <i
+        class={list ? 'far fa-square' : 'fas fa-list'}
+        onClick={() => setList(!list)}
+      >
+        view
+      </i>
       {isOpen ? toBeUpdated() : ''}
-      <ul className={noteStyles.listOfNotes}>
+      <ul className={list ? noteStyles.tilesOfNotes : noteStyles.listOfNotes}>
         {notes.map((note) => (
-          <li className={noteStyles.note} key={note.id}>
+          <li
+            className={list ? noteStyles.noteTile : noteStyles.noteList}
+            key={note.id}
+          >
             <div className={noteStyles.content}>
               <h3
                 className={
@@ -96,7 +108,7 @@ const Notes = () => {
               >
                 {note.title}
               </h3>
-              <h5>{note.important ? 'important' : 'not important'}</h5>
+
               <ReactMarkdown
                 className={noteStyles.markdown}
                 source={note.content}

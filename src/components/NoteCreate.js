@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { createNote } from '../reducers/noteReducer';
 import { createNotification } from '../reducers/notificationReducer';
 import Modal from 'react-modal';
+import TextareaAutosize from 'react-textarea-autosize';
 
 const NoteCreate = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,7 +37,7 @@ const NoteCreate = () => {
             placeholder="Title"
             required="true"
           />
-          <input
+          <TextareaAutosize
             className={noteCreateStyles.createInput}
             name="note"
             placeholder="Content"
