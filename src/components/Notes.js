@@ -18,19 +18,32 @@ const Notes = () => {
   const [note, setNote] = useState('');
   const [liveNote, setLiveNote] = useState('');
   const [list, setList] = useState(true);
+  const [updateMode, setUpdateMode] = useState(false);
   const dispatch = useDispatch();
+
+  let importance = useSelector((state) => state.filter);
+
+  console.log(importance);
+
   const notes = useSelector((state) =>
-    state.filter === ''
-      ? state.notes.sort((a, b) => b.votes - a.votes)
-      : state.notes
-          .sort((a, b) => b.votes - a.votes)
-          .filter((anecdote) =>
-            anecdote.content
-              .toString()
-              .toLowerCase()
-              .includes(state.filter.toLowerCase())
-          )
+    state.search === ''
+      ? state.notes
+      : state.notes.filter((note) =>
+          note.content
+            .toString()
+            .toLowerCase()
+            .includes(state.search.toLowerCase())
+        )
   );
+
+  let filteredNotes = null;
+  if (importance === 'ALL') {
+    filteredNotes = notes;
+  } else if (importance === 'IMPORTANT') {
+    filteredNotes = notes.filter((note) => note.important);
+  } else if (importance === 'NONIMPORTANT') {
+    filteredNotes = notes.filter((note) => !note.important);
+  }
 
   const updateNoted = (event) => {
     event.preventDefault();
@@ -43,32 +56,55 @@ const Notes = () => {
 
   console.log(notes);
 
-  const toBeUpdated = () => (
+  const toBeOpenedOrUpdated = () => (
     <Modal
       isOpen={isOpen}
       onRequestClose={() => [setIsOpen(false), setLiveNote('')]}
     >
-      <form onSubmit={updateNoted}>
+      {updateMode ? (
         <div>
-          <h4 className={noteStyles.updateModalTitle}>{note.title}</h4>
-          <TextareaAutosize
-            className={noteStyles.createInput}
-            name="note"
-            defaultValue={note.content}
-            autoFocus
-            onChange={(e) => setLiveNote(e.target.value)}
-          />
+          <form onSubmit={updateNoted}>
+            <div>
+              <h4 className={noteStyles.updateModalTitle}>{note.title}</h4>
+              <TextareaAutosize
+                className={noteStyles.createInput}
+                name="note"
+                defaultValue={note.content}
+                autoFocus
+                onChange={(e) => setLiveNote(e.target.value)}
+              />
+            </div>
+            <button className={noteStyles.updateSubmitButton} type="submit">
+              update
+            </button>
+            <button
+              className={noteStyles.updateSubmitButton}
+              onClick={() => setUpdateMode(!updateMode)}
+            >
+              View mode
+            </button>
+          </form>
+          <div className={noteStyles.borderAroundLive}>
+            <ReactMarkdown
+              className={noteStyles.liveText}
+              source={liveNote}
+            ></ReactMarkdown>
+          </div>
         </div>
-        <button className={noteStyles.updateSubmitButton} type="submit">
-          update
-        </button>
-      </form>
-      <div className={noteStyles.borderAroundLive}>
-        <ReactMarkdown
-          className={noteStyles.liveText}
-          source={liveNote}
-        ></ReactMarkdown>
-      </div>
+      ) : (
+        <div>
+          <button
+            className={noteStyles.updateSubmitButton}
+            onClick={() => setUpdateMode(!updateMode)}
+          >
+            Update Mode
+          </button>
+          <ReactMarkdown
+            className={noteStyles.liveText}
+            source={note.content}
+          ></ReactMarkdown>
+        </div>
+      )}
     </Modal>
   );
 
@@ -93,9 +129,9 @@ const Notes = () => {
       >
         view
       </i>
-      {isOpen ? toBeUpdated() : ''}
+      {isOpen ? toBeOpenedOrUpdated() : ''}
       <ul className={list ? noteStyles.tilesOfNotes : noteStyles.listOfNotes}>
-        {notes.map((note) => (
+        {filteredNotes.map((note) => (
           <li
             className={list ? noteStyles.noteTile : noteStyles.noteList}
             key={note.id}
