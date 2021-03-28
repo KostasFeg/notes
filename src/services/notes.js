@@ -8,7 +8,7 @@ const getAll = async () => {
 };
 
 const create = async (content, title) => {
-  const noteToCreate = { content, title, important: false };
+  const noteToCreate = { content, title, important: false, hashtags: [] };
   const response = await axios.post(baseUrl, noteToCreate);
   return response.data;
 };
@@ -30,4 +30,17 @@ const changeImportance = async (note) => {
   });
 };
 
-export default { getAll, update, create, deletion, changeImportance };
+const addHashtag = async (note) => {
+  const response = await axios.put(`${baseUrl}/${note.id}`, note);
+  console.log(response.data);
+  return response.data;
+};
+
+export default {
+  getAll,
+  update,
+  create,
+  deletion,
+  changeImportance,
+  addHashtag,
+};

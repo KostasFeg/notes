@@ -9,6 +9,8 @@ import TextareaAutosize from 'react-textarea-autosize';
 const NoteCreate = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
+  
+  
   const addNote = async (event) => {
     event.preventDefault();
     const content = event.target.note.value;

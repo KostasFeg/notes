@@ -4,6 +4,7 @@ import {
   updateNote,
   delNote,
   toggleImportanceOf,
+  addHashtag,
 } from '../reducers/noteReducer';
 import { createNotification } from '../reducers/notificationReducer';
 import noteStyles from '../styles/noteStyles.module.css';
@@ -18,7 +19,7 @@ const Notes = () => {
   const [note, setNote] = useState('');
   const [liveNote, setLiveNote] = useState('');
   const [list, setList] = useState(true);
-  const [updateMode, setUpdateMode] = useState(false);
+  const [updateMode, setUpdateMode] = useState(true);
   const dispatch = useDispatch();
 
   let importance = useSelector((state) => state.filter);
@@ -54,7 +55,13 @@ const Notes = () => {
     dispatch(createNotification(`${note.title} was updated`, 3000));
   };
 
-  console.log(notes);
+  const handleAddHashTag = (event) => {
+    event.preventDefault();
+    var hashtag = event.target.hashtag.value;
+    console.log(notes.map((notes) => (notes.id === note ? note : notes)));
+
+    dispatch(addHashtag(note, hashtag));
+  };
 
   const toBeOpenedOrUpdated = () => (
     <Modal
@@ -63,6 +70,12 @@ const Notes = () => {
     >
       {updateMode ? (
         <div>
+          <div>
+            <form onSubmit={handleAddHashTag}>
+              <input name="hashtag" placeholder="hashtag..." />
+              <button type="submit">+</button>
+            </form>
+          </div>
           <form onSubmit={updateNoted}>
             <div>
               <h4 className={noteStyles.updateModalTitle}>{note.title}</h4>
@@ -74,6 +87,7 @@ const Notes = () => {
                 onChange={(e) => setLiveNote(e.target.value)}
               />
             </div>
+
             <button className={noteStyles.updateSubmitButton} type="submit">
               update
             </button>
@@ -90,6 +104,7 @@ const Notes = () => {
               source={liveNote}
             ></ReactMarkdown>
           </div>
+          <p>Hashtags: {note.hashtags}</p>
         </div>
       ) : (
         <div>
@@ -123,13 +138,13 @@ const Notes = () => {
 
   return (
     <div>
-      <i
-        class={list ? 'far fa-square' : 'fas fa-list'}
-        onClick={() => setList(!list)}
-      >
-        view
-      </i>
-      {isOpen ? toBeOpenedOrUpdated() : ''}
+      <div className={noteStyles.changeView}>
+        <i
+          class={list ? 'far fa-square' : 'fas fa-list'}
+          onClick={() => setList(!list)}
+        ></i>
+      </div>
+
       <ul className={list ? noteStyles.tilesOfNotes : noteStyles.listOfNotes}>
         {filteredNotes.map((note) => (
           <li
@@ -144,7 +159,7 @@ const Notes = () => {
               >
                 {note.title}
               </h3>
-
+              {isOpen ? toBeOpenedOrUpdated() : ''}
               <ReactMarkdown
                 className={noteStyles.markdown}
                 source={note.content}

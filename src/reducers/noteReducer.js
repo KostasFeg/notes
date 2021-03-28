@@ -26,7 +26,21 @@ const noteReducer = (state = initialState, action) => {
       return state.map((note) =>
         note.id !== idImportance ? note : changedNote
       );
+    case 'ADD_HASHTAG':
+      const idOfAddedHashtagNote = action.data.id;
+      console.log(state);
+      const noteToAddHashtag = state.find(
+        (note) => note.id === idOfAddedHashtagNote
+      );
 
+      const noteWithHashTag = {
+        ...noteToAddHashtag,
+        hashtags: action.data.hashtags,
+      };
+
+      return state.map((a) =>
+        a.id === idOfAddedHashtagNote ? noteWithHashTag : a
+      );
     default:
       return state;
   }
@@ -80,6 +94,21 @@ export const toggleImportanceOf = (note) => {
     const notToChangeImportance = await noteService.changeImportance(note);
 
     dispatch({ type: 'TOGGLE_IMPORTANCE', data: note.id });
+  };
+};
+
+export const addHashtag = (note, hashtag) => {
+  return async (dispatch) => {
+    const newHashtags = note.hashtags.concat(hashtag);
+    console.log(`New: ${newHashtags}`);
+    const noteWithHashtagToBeUpdated = { ...note, hashtags: newHashtags };
+    console.log(noteWithHashtagToBeUpdated);
+
+    const noteWithHashtag = await noteService.addHashtag(
+      noteWithHashtagToBeUpdated
+    );
+
+    dispatch({ type: 'ADD_HASHTAG', data: noteWithHashtag });
   };
 };
 

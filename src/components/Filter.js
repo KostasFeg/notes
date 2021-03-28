@@ -13,31 +13,31 @@ const Filter = () => {
 
   return (
     <div>
-    <div className={filterStyles.headerAndSearch}>
-      <h3 className={filterStyles.header}>NOTES</h3>
-      <input className={filterStyles.searchField} onChange={handleChange} />
+      <div className={filterStyles.headerAndSearch}>
+        <h3 className={filterStyles.header}>NOTES</h3>
+        <input className={filterStyles.searchField} onChange={handleChange} />
+      </div>
+      <div className={filterStyles.radio}>
+        all
+        <input
+          type="radio"
+          name="filter"
+          onChange={() => dispatch(filterChange('ALL'))}
+        />
+        important
+        <input
+          type="radio"
+          name="filter"
+          onChange={() => dispatch(filterChange('IMPORTANT'))}
+        />
+        nonimportant
+        <input
+          type="radio"
+          name="filter"
+          onChange={() => dispatch(filterChange('NONIMPORTANT'))}
+        />
+      </div>
     </div>
-    <div>
-    all
-    <input
-      type="radio"
-      name="filter"
-      onChange={() => dispatch(filterChange('ALL'))}
-    />
-    important
-    <input
-      type="radio"
-      name="filter"
-      onChange={() => dispatch(filterChange('IMPORTANT'))}
-    />
-    nonimportant
-    <input
-      type="radio"
-      name="filter"
-      onChange={() => dispatch(filterChange('NONIMPORTANT'))}
-    />
-  </div>
-  </div>
   );
 };
 
