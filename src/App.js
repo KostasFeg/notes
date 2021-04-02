@@ -6,8 +6,6 @@ import { initializeNotes } from './reducers/noteReducer';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 
-import './styles/App.css';
-
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {

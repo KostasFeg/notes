@@ -70,6 +70,7 @@ export const updateNote = (note, newContent) => {
   return async (dispatch) => {
     const notetoBeUpdated = { ...note, content: newContent };
     console.log(notetoBeUpdated);
+
     const updatedNote = await noteService.update(notetoBeUpdated);
     console.log(note);
     dispatch({
@@ -98,6 +99,8 @@ export const toggleImportanceOf = (note) => {
 };
 
 export const addHashtag = (note, hashtag) => {
+  console.log(note);
+  console.log(hashtag);
   return async (dispatch) => {
     const newHashtags = note.hashtags.concat(hashtag);
     console.log(`New: ${newHashtags}`);

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import noteCreateStyles from '../styles/noteCreateStyles.module.css';
 import { useDispatch } from 'react-redux';
 import { createNote } from '../reducers/noteReducer';
 import { createNotification } from '../reducers/notificationReducer';
@@ -9,8 +8,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 const NoteCreate = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
-  
-  
+
   const addNote = async (event) => {
     event.preventDefault();
     const content = event.target.note.value;
@@ -24,9 +22,9 @@ const NoteCreate = () => {
     }, 300);
   };
   return (
-    <div className={noteCreateStyles.createButtonDiv}>
+    <div className="text-center m-4">
       <button
-        className={noteCreateStyles.createButton}
+        className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
         onClick={() => setIsOpen(true)}
       >
         Create
@@ -34,20 +32,13 @@ const NoteCreate = () => {
       <Modal isOpen={isOpen} onRequestClose={() => setIsOpen(false)}>
         <form onSubmit={addNote}>
           <input
-            className={noteCreateStyles.createInput}
+            className="text-center"
             name="title"
             placeholder="Title"
             required="true"
           />
-          <TextareaAutosize
-            className={noteCreateStyles.createInput}
-            name="note"
-            placeholder="Content"
-            required="true"
-          />
-          <button className={noteCreateStyles.createSubmitBtn} type="submit">
-            create
-          </button>
+          <TextareaAutosize name="note" placeholder="Content" required="true" />
+          <button type="submit">create</button>
         </form>
       </Modal>
     </div>
