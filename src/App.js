@@ -12,6 +12,8 @@ const App = () => {
     dispatch(initializeNotes());
   }, [dispatch]);
 
+  console.log('hi');
+
   return (
     <div>
       <Notifications />
